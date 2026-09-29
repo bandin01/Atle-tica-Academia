@@ -1,0 +1,89 @@
+# Prompt Sênior Definitivo: Redesign e Arquitetura Front-End — Athletic Academia
+
+```markdown
+Você é um Engenheiro Front-End Sênior e UI/UX Designer especialista em experiências imersivas, animações de alta performance e interfaces modernas orientadas a conversão. Preciso que você desenvolva o design system, a arquitetura e o código completo (HTML, CSS/Tailwind e JavaScript modular) de um site de página única (one-page website) ultra-moderno para a **ATHLETIC ACADEMIA**, uma academia exclusivamente feminina situada na Rua Santa Bárbara, 206 - Centro, Santa Bárbara d'Oeste (SP).
+
+O projeto deve abandonar completamente a estética convencional de academias e adotar uma abordagem **"Futurística, Tecnológica e Humanizada"**, inspirada em interfaces de alta sofisticação (Dark Mode refinado, glassmorphism profundo, micro-interações fluidas e tipografia imponente).
+
+---
+
+## 1. DIRETRIZES DE DESIGN E IDENTIDADE VISUAL
+- **Paleta de Cores (Baseada na Identidade Real da Marca):**
+  - *Fundo Primário (Dark Core):* Grafite Profundo / Preto Fosco (`#0A0A0C` / `#121215`).
+  - *Fundo de Superfície (Glass Containers):* Preto translúcido com gradientes sutis e bordas em vidro fosco (`rgba(255, 255, 255, 0.03)` com `backdrop-filter: blur(16px)`).
+  - *Cores de Destaque (Energia & Feminilidade):* Magenta Elétrico (`#FF2A6D`), Teal Neon (`#05D9E8` para detalhes tecnológicos secundários) e Toques de Ouro Rosé (`#E0A96D`) para destacar elementos de exclusividade e bem-estar (como experiências de Pilates com Vinho).
+- **Tipografia:**
+  - *Títulos:* Sans-serif geométrica de alto impacto e peso forte (ex: *Syne*, *Plus Jakarta Sans* ou *Montserrat* com tracking ajustado).
+  - *Corpo:* Extremamente limpa e legível em múltiplos viewports (ex: *Inter* ou *Outfit*).
+
+---
+
+## 2. ESTRUTURA COMPLETA E CONTEÚDO REAL DA APLICAÇÃO
+
+O site deve ser estruturado em seções fluidas, integrando perfeitamente as informações reais extraídas dos canais oficiais da marca:
+
+### A. Header & Navegação Fixa (Glassmorphism)
+- **Menu:** Sobre, Modalidades, Aulas (Schedule), YouTube/Treinos, Dicas, Planos e Contato.
+- **CTA Principal:** Botão fixo com efeito de brilho neon ("MATRICULE-SE JÁ" direcionando para o WhatsApp oficial da academia: `wa.me/message/7NTMKZEYCBS2J1`).
+
+### B. Seção Hero (Impacto Visual Imediato)
+- **Tag Superior:** `★ Espaço Exclusivo Para Você, Mulher`
+- **Título Principal:** "TRANSFORME SUA MELHOR VERSÃO" com animação de revelação de texto letra por letra (Staggered Text Reveal).
+- **Subtítulo:** "Um refúgio de bem-estar, força e comunidade feminina no centro de Santa Bárbara d'Oeste. Treine com acompanhamento de verdade, sem julgamentos."
+- **CTAs Duplos:** 
+  1. "Agende sua Aula Experimental" (Com micro-interação de hover magnético).
+  2. "Conhecer Planos e Benefícios".
+
+### C. Seção Sobre a Atlética & Diferenciais (Comprovação de Autoridade)
+- **Missão:** Mais do que um lugar para treinar, um ambiente acolhedor onde cada aluna conta com acompanhamento próximo de professoras preparadas para orientar execuções, ajustar equipamentos e garantir segurança e eficiência.
+- **Diferenciais Interativos em Cards:**
+  - *Acompanhamento Estratégico:* Professoras presentes em cada série para garantir propósito e correção.
+  - *Bioimpedância Avançada:* Acompanhamento preciso da composição corporal (massa muscular e percentual de gordura) para metas reais.
+  - *Comunidade & Conexão:* Eventos exclusivos (como as aulas de Pilates com Vinho e Arraiá da Atlética) que unem leveza, saúde e momentos entre mulheres.
+
+### D. Nossas Modalidades (Cards Dinâmicos & Hover 3D)
+Crie uma grade interativa de cards com efeito de profundidade (Tilt Effect no movimento do mouse):
+1. **Musculação:** Foco em resultados consistentes, constância e alinhamento com a rotina.
+2. **Treinamento Funcional:** Dinamismo e agilidade para o dia a dia.
+3. **Athletic Dance:** A nova modalidade que une dança, música e exercício em uma aula cheia de energia.
+4. **Pilates:** Conexão, postura e controle (incluindo experiências diferenciadas como o *Flow & Wine*).
+5. **Boxe Feminino / Aulas de Jump:** Alta intensidade, queima calórica e liberação de estresse.
+
+### E. Grade de Aulas Coletivas & Cronograma (Schedule Interativo)
+- Implementar um seletor de dias da semana (Segunda a Sábado) dinâmico via JavaScript.
+- Exibir os horários típicos de aulas especiais e coletivas (ex: *Aulas de Jump nos períodos da manhã/noite*, *Pilates*, *Dança*).
+- Destaque interativo para avisos importantes da rotina (ex: cuidados com aquecimento no inverno, estratégias de treino respeitando o ciclo menstrual e orientações pós-finais de semana sem neuras de "pagar" o cardio).
+
+### F. Seção de Dicas, Conteúdos e YouTube (Biblioteca de Conhecimento)
+- Cards de preview simulando os quadros educativos da marca ("Treinos que cabem na rotina", "O que é Lipedema e como a musculação ajuda", "Por que a barriga é a última a mudar?", "Cuidados pós-40 anos").
+- Atalho integrado simulando o acesso aos vídeos e conteúdos práticos do canal do YouTube da Atlética.
+
+### G. Planos e Avaliação Corporal (Conversão)
+- Exibição interativa dos planos disponíveis com destaque para os benefícios de adesão (ex: vantagens exclusivas de bioimpedância para alinhamento estratégico de resultados).
+- Botões de conversão direta para fechamento de matrícula via WhatsApp.
+
+### H. Contato, Localização e Rodapé
+- **Endereço Completo:** Rua Santa Bárbara, 206 - Centro, Santa Bárbara d'Oeste - SP.
+- **Contato Direto:** Link direto para o WhatsApp oficial (`wa.me/message/7NTMKZEYCBS2J1`) e e-mail de suporte (`contato@atleticacademia.com.br`).
+- **Mapa Integrado** estilizado em Dark Mode via CSS/iframe.
+- **Rodapé:** Copyright © 2026 Athletic Academia. Todos os direitos reservados.
+
+---
+
+## 3. ESPECIFICAÇÕES TÉCNICAS E REQUISITOS DE FRONT-END (SÊNIOR)
+
+O código entregue deve seguir rigorosamente as melhores práticas de engenharia web moderna:
+
+1. **Stack Tecnológica Sugerida no Código:**
+   - **HTML5 Semântico:** Uso correto de tags (`<header>`, `<main>`, `<section>`, `<article>`, `<footer>`).
+   - **Tailwind CSS (via CDN ou configuração JIT):** Utilizando classes utilitárias customizadas para sombras complexas, gradientes e estados reativos (`hover:`, `focus:`, `group-hover:`).
+   - **JavaScript Vanilla (ES6+ Modular):** Organizado para gerenciar a interatividade da grade de horários, menus mobile responsivos, animações de scroll e Efeito Tilt nos cards.
+
+2. **Requisitos Avançados de Animação e Interatividade:**
+   - **Scroll-Driven / Intersection Observer API:** Elementos devem surgir suavemente com efeito de fade-up e escala conforme o usuário rola a página.
+   - **Glassmorphic Glow on Mousemove:** Nos botões principais e cards de destaque, aplique um efeito de gradiente de luz que segue sutilmente a posição do cursor.
+   - **Responsividade Absoluta (Mobile-First):** Layout impecável desde telas de smartphones compactos até monitores ultrawide 4K.
+   - **Performance Otimizada:** Transições executadas via `transform` e `opacity` para garantir taxa constante de 60fps, sem uso de bibliotecas pesadas desnecessárias.
+
+---
+Por favor, gere a estrutura completa do código limpo, modular e comentado, estruturado de forma profissional para entrega imediata de prototipagem funcional.

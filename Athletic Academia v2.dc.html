@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#0A0A0C;color:#F4F1F3;font-family:Outfit,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#FF2A6D;text-decoration:none}a:hover{color:#ff6b96}
+*{box-sizing:border-box}
+@keyframes athPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,42,109,.5)}50%{box-shadow:0 0 22px 2px rgba(255,42,109,.45)}}
+@keyframes athFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+</style>
+</helmet>
+<div data-k="intro" role="presentation" aria-hidden="true" style="position:fixed;inset:0;z-index:300;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden">
+  <div data-k="introGlow" style="position:absolute;width:min(90vw,720px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,42,109,.22),rgba(255,42,109,0) 62%);opacity:0;pointer-events:none"></div>
+  <div data-k="introLogo" style="position:relative;width:min(58vw,340px);aspect-ratio:703/542;opacity:0">
+    <div style="position:absolute;inset:0;-webkit-mask:url(assets/logo-mark.png) center/contain no-repeat;mask:url(assets/logo-mark.png) center/contain no-repeat;background:linear-gradient(160deg,#5d6066 0%,#c9ccd1 28%,#8b8e94 46%,#eef0f3 62%,#7a7d83 80%,#b7babf 100%)"></div>
+    <div data-k="introSheen" style="position:absolute;inset:0;-webkit-mask:url(assets/logo-mark.png) center/contain no-repeat;mask:url(assets/logo-mark.png) center/contain no-repeat;background:linear-gradient(115deg,rgba(255,255,255,0) 38%,rgba(255,255,255,.95) 50%,rgba(255,255,255,0) 62%);background-size:300% 100%;background-position:120% 0;mix-blend-mode:screen"></div>
+  </div>
+  <button data-k="introSkip" type="button" style="position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));min-height:44px;padding:0 18px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#8a8087;font-family:Outfit;font-size:13px;letter-spacing:.12em;cursor:pointer;opacity:0;transition:color .2s,border-color .2s" style-hover="color:#F4F1F3;border-color:rgba(255,42,109,.6)">PULAR</button>
+</div>
+<div style="position:relative;min-height:100svh;overflow-x:clip;background:radial-gradient(1200px 700px at 85% -10%,rgba(94,26,60,.55),transparent 60%),radial-gradient(900px 600px at -10% 40%,rgba(94,26,60,.3),transparent 60%),#0A0A0C">
+
+<div data-k="curtain" style="position:fixed;inset:0;z-index:200;pointer-events:none;background:radial-gradient(circle at 50% 50%,#FF2A6D,#5E1A3C 55%,#0A0A0C 100%);clip-path:circle(0% at 50% 50%)"></div>
+<div data-k="glow" style="display:{{ glowDisplay }};position:fixed;left:0;top:0;width:640px;height:640px;border-radius:50%;background:radial-gradient(circle,rgba(255,42,109,.13),transparent 62%);pointer-events:none;z-index:1;mix-blend-mode:screen;will-change:transform"></div>
+<header style="position:fixed;top:16px;left:50%;transform:translateX(-50%);width:min(1240px,calc(100% - 32px));z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 12px 10px 20px;border-radius:18px;background:rgba(18,18,21,.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08)">
+  <a href="#topo" style="display:flex;align-items:center;gap:12px;color:#F4F1F3">
+    <img src="assets/logo-mark.png" alt="Atlética Academia Feminina" style="height:30px;width:auto;display:block">
+    <span style="display:{{ brandDisplay }};font-family:Syne;font-weight:700;font-size:15px;letter-spacing:.08em">ATLÉTICA</span>
+  </a>
+  <nav style="display:{{ navDisplay }};gap:26px;font-size:14px;color:#B9B2B7">
+    <a href="#sobre" style="color:#B9B2B7" style-hover="color:#fff">Sobre</a>
+    <a href="#modalidades" style="color:#B9B2B7" style-hover="color:#fff">Modalidades</a>
+    <a href="#aulas" style="color:#B9B2B7" style-hover="color:#fff">Aulas</a>
+    <a href="#planos" style="color:#B9B2B7" style-hover="color:#fff">Planos</a>
+    <a href="Galeria.dc.html" onClick="{{ goGallery }}" style="color:#B9B2B7" style-hover="color:#fff">Galeria</a>
+    <a href="#contato" style="color:#B9B2B7" style-hover="color:#fff">Contato</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="https://wa.me/5519974183482?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20a%20matr%C3%ADcula%20na%20Atl%C3%A9tica%20Academia." target="_blank" style="display:inline-flex;align-items:center;min-height:44px;padding:0 {{ ctaPad }};border-radius:12px;background:#FF2A6D;color:#fff;font-weight:600;font-size:13px;letter-spacing:.06em;animation:athPulse 2.6s ease-in-out infinite;white-space:nowrap">MATRICULE-SE JÁ</a>
+    <button onClick="{{ toggleMenu }}" aria-label="Menu" style="display:{{ burgerDisplay }};width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#fff;font-size:18px;cursor:pointer;align-items:center;justify-content:center">{{ menuIcon }}</button>
+  </div>
+</header>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;top:88px;left:16px;right:16px;z-index:49;padding:12px;border-radius:18px;background:rgba(18,18,21,.92);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column">
+    <a onClick="{{ closeMenu }}" href="#sobre" style="padding:14px;color:#F4F1F3;font-size:17px">Sobre</a>
+    <a onClick="{{ closeMenu }}" href="#modalidades" style="padding:14px;color:#F4F1F3;font-size:17px">Modalidades</a>
+    <a onClick="{{ closeMenu }}" href="#aulas" style="padding:14px;color:#F4F1F3;font-size:17px">Aulas</a>
+    <a onClick="{{ closeMenu }}" href="#planos" style="padding:14px;color:#F4F1F3;font-size:17px">Planos</a>
+    <a onClick="{{ goGallery }}" href="Galeria.dc.html" style="padding:14px;color:#F4F1F3;font-size:17px">Galeria</a>
+    <a onClick="{{ closeMenu }}" href="#contato" style="padding:14px;color:#F4F1F3;font-size:17px">Contato</a>
+  </div>
+</sc-if>
+
+<main>
+<section id="topo" data-k="pin-hero" data-screen-label="Hero" style="position:relative;height:190vh">
+  <div style="position:sticky;top:0;height:100svh;overflow:hidden">
+    <div data-k="heroIntro" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:max(96px,13vh) 24px max(56px,9vh);will-change:transform,opacity">
+      <img data-k="heroLogo" src="assets/logo-mark.png" alt="Atlética Academia Feminina" style="width:clamp(40px,7vh,96px);height:auto;filter:drop-shadow(0 16px 40px rgba(255,42,109,.45));will-change:transform">
+      <div style="margin-top:clamp(10px,2.4vh,24px);display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid rgba(224,169,109,.35);background:rgba(224,169,109,.08);color:#E0A96D;font-size:13px;letter-spacing:.04em">★ Espaço Exclusivo Para Você, Mulher</div>
+      <div style="container-type:inline-size;width:100%;max-width:1200px;margin-top:clamp(10px,2.2vh,22px)">
+        <h1 data-k="heroTitle" style="font-family:Syne;font-weight:800;font-size:min(8.4cqw,9vh);line-height:.95;letter-spacing:-.02em;margin:0;display:flex;flex-wrap:wrap;justify-content:center;column-gap:.25em;will-change:transform">
+          <sc-for list="{{ heroWords }}" as="w" hint-placeholder-count="4">
+            <span style="display:inline-flex;white-space:nowrap;color:{{ w.color }}">
+              <sc-for list="{{ w.letters }}" as="l"><span data-ch="1" style="display:inline-block">{{ l }}</span></sc-for>
+            </span>
+          </sc-for>
+        </h1>
+      </div>
+      <p style="font-size:clamp(16px,1.4vw,19px);line-height:1.6;color:#B9B2B7;max-width:560px;margin:clamp(10px,2.4vh,24px) auto 0;text-wrap:pretty">Um refúgio de bem-estar, força e comunidade feminina no centro de Santa Bárbara d'Oeste. Treine com acompanhamento de verdade, sem julgamentos.</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:clamp(14px,3.2vh,32px)">
+        <a onMouseMove="{{ magnetMove }}" onMouseLeave="{{ magnetLeave }}" href="https://wa.me/5519974183482?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20aula%20experimental%20na%20Atl%C3%A9tica%20Academia.%20Quais%20hor%C3%A1rios%20est%C3%A3o%20dispon%C3%ADveis%3F" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:clamp(12px,1.8vh,17px) 26px;border-radius:999px;background:#FF2A6D;color:#fff;font-weight:600;font-size:16px;transition:transform .25s cubic-bezier(.2,.8,.2,1);box-shadow:0 10px 40px -10px rgba(255,42,109,.7)">Agende sua Aula Experimental <span>→</span></a>
+        <a href="#planos" onMouseMove="{{ glowMove }}" style="display:inline-flex;align-items:center;padding:clamp(12px,1.8vh,17px) 26px;border-radius:999px;color:#F4F1F3;font-weight:500;font-size:16px;border:1px solid rgba(255,255,255,.14);background:radial-gradient(160px circle at var(--mx,50%) var(--my,50%),rgba(255,42,109,.18),rgba(255,255,255,.03) 70%)">Conhecer Planos e Benefícios</a>
+      </div>
+    </div>
+    <div data-k="heroHint" style="position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.24em;color:#8a8087">ROLE PARA DESCOBRIR ↓</div>
+      </div>
+</section>
+
+<section id="sobre" data-k="pin-man" data-screen-label="Manifesto" style="position:relative;height:240vh">
+  <div style="position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;padding:0 24px">
+    <div style="max-width:1100px;width:100%">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">SOBRE A ATLÉTICA</div>
+      <p style="font-family:Syne;font-weight:700;font-size:clamp(28px,4.3vw,62px);line-height:1.12;letter-spacing:-.02em;margin:24px 0 0;display:flex;flex-wrap:wrap;column-gap:.26em">
+        <sc-for list="{{ manWords }}" as="w" hint-placeholder-count="20"><span data-k="mw" style="opacity:.14;color:{{ w.c }}">{{ w.t }}</span></sc-for>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="diferenciais" data-screen-label="Diferenciais" style="max-width:1240px;margin:0 auto;padding:80px 24px 100px">
+  <div data-reveal="1" style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">01 — DIFERENCIAIS</div>
+  <h2 data-reveal="1" style="font-family:Syne;font-weight:700;font-size:clamp(34px,4.5vw,58px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 56px">O que faz a diferença no seu treino.<br><span style="color:#FF2A6D">Seja Atlética Feminina.</span></h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px">
+    <sc-for list="{{ diffs }}" as="d" hint-placeholder-count="3">
+      <article data-reveal="1" onMouseMove="{{ glowMove }}" style="position:relative;padding:34px 30px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(255,42,109,.12),rgba(255,255,255,.03) 60%);backdrop-filter:blur(16px);min-height:280px;display:flex;flex-direction:column;justify-content:space-between;gap:40px">
+        <span style="font-family:Syne;font-weight:700;font-size:15px;color:{{ d.accent }}">{{ d.n }}</span>
+        <div>
+          <h3 style="font-family:Syne;font-weight:700;font-size:24px;margin:0 0 12px;letter-spacing:-.01em">{{ d.t }}</h3>
+          <p style="margin:0;color:#B9B2B7;font-size:16px;line-height:1.6">{{ d.x }}</p>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+</section>
+
+<section id="estrutura" data-screen-label="Estrutura" style="max-width:1240px;margin:0 auto;padding:100px 24px;display:grid;grid-template-columns:{{ estCols }};gap:48px">
+  <div>
+    <div style="position:sticky;top:110px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">02 — ESTRUTURA & SEGURANÇA</div>
+      <h2 style="font-family:Syne;font-weight:700;font-size:clamp(34px,4.5vw,58px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 0">Estrutura Completa</h2>
+      <div data-k="pin-lpf" style="position:relative;margin-top:clamp(20px,4vh,40px);width:min(100%,46vh,340px);aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+        <svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%">
+          <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(255,255,255,.08)" stroke-width=".8"></circle>
+          <circle data-k="lpfRing" cx="50" cy="50" r="47" fill="none" stroke="#FF2A6D" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="295.3" stroke-dashoffset="295.3" transform="rotate(-90 50 50)"></circle>
+        </svg>
+        <div style="position:relative;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.12em;color:#05D9E8;padding:0 14%">LPF – LOW PRESSURE FITNESS</div>
+        <div style="position:relative;font-family:Syne;font-weight:700;font-size:15px;color:#B9B2B7;margin-top:8px">até</div>
+        <div style="position:relative;font-family:Syne;font-weight:800;font-size:min(72px,11vh);line-height:.9;letter-spacing:-.04em"><span data-k="lpfCount">0</span><span style="font-size:.36em;letter-spacing:0;color:#FF2A6D"> cm</span></div>
+        <p data-k="lpfText" style="position:relative;margin:10px 0 0;padding:0 16%;font-size:12px;line-height:1.45;color:#D9D3D7">de redução na circunferência abdominal com o sistema de treinamento postural e respiratório focado no fortalecimento do core.</p>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column">
+    <sc-for list="{{ estrutura }}" as="e" hint-placeholder-count="7">
+      <div data-k="est" style="padding:38px 0;border-top:1px solid rgba(255,255,255,.08);opacity:.25;will-change:opacity,transform">
+        <div style="font-family:Syne;font-weight:700;font-size:14px;color:{{ e.c }}">{{ e.n }}</div>
+        <h3 style="font-family:Syne;font-weight:700;font-size:clamp(26px,3.2vw,44px);line-height:1.05;letter-spacing:-.015em;margin:12px 0 10px">{{ e.t }}</h3>
+        <p style="margin:0;color:#B9B2B7;font-size:17px;line-height:1.55">{{ e.x }}</p>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+
+
+<section id="modalidades" data-k="pin-gal" data-screen-label="Modalidades" style="position:relative;height:400vh">
+  <div style="position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;gap:clamp(16px,3.5vh,40px);padding-top:74px">
+    <div style="max-width:1240px;width:100%;margin:0 auto;padding:0 24px;display:flex;flex-direction:column;gap:clamp(14px,2.6vh,24px)">
+      <div>
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">03 — MODALIDADES</div>
+        <h2 style="font-family:Syne;font-weight:700;font-size:clamp(26px,3.4vw,46px);line-height:1.02;letter-spacing:-.02em;margin:14px 0 0">11 modalidades.<br>Escolha como você quer se mover.</h2>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:20px">
+        <div role="tablist" style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;min-width:0">
+          <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+            <button role="tab" onClick="{{ c.select }}" style="flex:none;min-height:40px;padding:0 18px;border-radius:999px;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.color }};font-family:Outfit;font-size:14px;font-weight:500;cursor:pointer;transition:background .25s,color .25s,border-color .25s;white-space:nowrap">{{ c.label }} <span style="opacity:.6;font-size:12px">{{ c.count }}</span></button>
+          </sc-for>
+        </div>
+        <div style="flex:none;width:min(200px,24vw);height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden"><div data-k="galBar" style="height:100%;background:#FF2A6D;transform-origin:left;transform:scaleX(0)"></div></div>
+      </div>
+    </div>
+    <div data-k="galTrack" style="display:flex;gap:18px;width:max-content;padding:0 max(24px,calc((100vw - 1192px)/2));will-change:transform;perspective:1000px">
+      <sc-for list="{{ mods }}" as="m" hint-placeholder-count="5">
+        <sc-if value="{{ m.split }}" hint-placeholder-val="{{ false }}">
+        <article onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}" style="flex:none;position:relative;width:min(76vw,330px);height:min(48vh,460px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 14px),linear-gradient(180deg,#1f0f18,#121215);transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s;transform-style:preserve-3d;display:flex;flex-direction:column;padding:0">
+          <div style="position:relative;flex:1 0 56%;min-height:0;overflow:hidden">
+            <img src="{{ m.src }}" alt="{{ m.t }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ m.pos }}">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,.3) 0%,rgba(10,10,12,0) 30%,rgba(10,10,12,0) 70%,#121215 100%)"></div>
+            <span style="position:absolute;top:20px;right:20px;font-family:Syne;font-weight:700;font-size:13px;color:{{ m.accent }};padding:4px 8px;border-radius:8px;background:rgba(10,10,12,.55);backdrop-filter:blur(8px)">{{ m.n }}</span>
+            <sc-if value="{{ m.tag }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:20px;left:20px;padding:5px 10px;border-radius:999px;font-size:11px;letter-spacing:.06em;color:#E0A96D;border:1px solid rgba(224,169,109,.4);background:rgba(10,10,12,.55);backdrop-filter:blur(8px)">{{ m.tag }}</span></sc-if>
+          </div>
+          <div style="position:relative;padding:10px 22px 20px;background:#121215;min-height:0;overflow:hidden;transform:translateZ(40px)">
+            <h3 style="font-family:Syne;font-weight:700;font-size:22px;line-height:1.05;margin:0 0 8px">{{ m.t }}</h3>
+            <p style="margin:0;color:#B9B2B7;font-size:14px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ m.x }}</p>
+          </div>
+        </article>
+        </sc-if>
+        <sc-if value="{{ m.full }}" hint-placeholder-val="{{ true }}">
+        <article onMouseMove="{{ tiltMove }}" onMouseLeave="{{ tiltLeave }}" style="flex:none;position:relative;width:min(76vw,330px);height:min(48vh,460px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 14px),linear-gradient(180deg,#1f0f18,#121215);transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s;transform-style:preserve-3d;display:flex;flex-direction:column;justify-content:space-between;padding:24px">
+          <sc-if value="{{ m.src }}" hint-placeholder-val="{{ false }}">
+            <img src="{{ m.src }}" alt="{{ m.t }}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ m.pos }};transform:scale(1.02)">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,.35) 0%,rgba(10,10,12,0) 30%,rgba(10,10,12,.55) 58%,rgba(10,10,12,.94) 100%)"></div>
+          </sc-if>
+          <div style="position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;color:#8a8087">{{ m.label }}</span>
+            <span style="font-family:Syne;font-weight:700;font-size:13px;color:{{ m.accent }};padding:4px 8px;border-radius:8px;background:rgba(10,10,12,.55);backdrop-filter:blur(8px)">{{ m.n }}</span>
+          </div>
+          <div style="position:relative;transform:translateZ(40px)">
+            <sc-if value="{{ m.tag }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;margin-bottom:12px;padding:5px 10px;border-radius:999px;font-size:11px;letter-spacing:.06em;color:#E0A96D;border:1px solid rgba(224,169,109,.4)">{{ m.tag }}</span></sc-if>
+            <h3 style="font-family:Syne;font-weight:700;font-size:25px;line-height:1.05;margin:0 0 10px">{{ m.t }}</h3>
+            <p style="margin:0;color:#B9B2B7;font-size:15px;line-height:1.5">{{ m.x }}</p>
+          </div>
+        </article>
+        </sc-if>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="aulas" data-screen-label="Aulas" style="max-width:1240px;margin:0 auto;padding:100px 24px">
+  <div data-reveal="1" style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">04 — GRADE DE AULAS</div>
+  <h2 data-reveal="1" style="font-family:Syne;font-weight:700;font-size:clamp(34px,4.5vw,58px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 40px">Sua semana, organizada.</h2>
+  <div data-reveal="1" style="display:grid;grid-template-columns:{{ schedCols }};gap:18px;align-items:start">
+    <div style="min-width:0;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);backdrop-filter:blur(16px);padding:14px">
+      <div style="display:flex;gap:6px;overflow-x:auto;padding:4px">
+        <sc-for list="{{ days }}" as="d" hint-placeholder-count="6">
+          <button onClick="{{ d.select }}" style="flex:1 1 0;min-width:44px;padding:14px 4px;border-radius:14px;border:1px solid {{ d.border }};background:{{ d.bg }};color:{{ d.color }};font-family:Outfit;font-size:15px;font-weight:500;cursor:pointer;transition:background .2s">{{ d.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:12px 8px 4px;padding:14px 16px;border-radius:14px;background:rgba(5,217,232,.06);border:1px solid rgba(5,217,232,.2)">
+        <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.12em;color:#05D9E8">FUNCIONAMENTO · {{ dayName }}</span>
+        <span style="font-family:Syne;font-weight:700;font-size:17px">{{ hours }}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;margin-top:8px">
+        <sc-for list="{{ classes }}" as="c" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:90px 1fr auto;gap:16px;align-items:center;padding:18px 16px;border-top:1px solid rgba(255,255,255,.06)">
+            <span style="font-family:Syne;font-weight:700;font-size:20px">{{ c.h }}</span>
+            <div style="min-width:0">
+              <div style="font-size:17px;font-weight:500">{{ c.t }}</div>
+              <div style="font-size:14px;color:#8a8087;margin-top:2px">{{ c.p }}</div>
+            </div>
+            <span style="width:10px;height:10px;border-radius:50%;background:{{ c.dot }};box-shadow:0 0 10px {{ c.dot }}"></span>
+          </div>
+        </sc-for>
+      </div>
+      <p style="margin:6px 16px 10px;font-size:13px;color:#6f676c">Horários ilustrativos — confirme a grade atual pelo WhatsApp.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#05D9E8;padding:4px 4px 2px">AVISOS DA ROTINA</div>
+      <sc-for list="{{ notices }}" as="n" hint-placeholder-count="3">
+        <button onClick="{{ n.toggle }}" style="text-align:left;padding:20px 22px;border-radius:18px;border:1px solid {{ n.border }};background:{{ n.bg }};color:#F4F1F3;font-family:Outfit;cursor:pointer;transition:all .25s">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:16px;font-weight:600">{{ n.t }}<span style="color:#05D9E8;font-size:20px;font-weight:400">{{ n.sign }}</span></div>
+          <sc-if value="{{ n.open }}" hint-placeholder-val="{{ false }}"><p style="margin:10px 0 0;color:#B9B2B7;font-size:15px;line-height:1.55;font-weight:400">{{ n.x }}</p></sc-if>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="avaliacoes" data-screen-label="Avaliações" style="max-width:1000px;margin:0 auto;padding:80px 24px">
+  <div data-reveal="1" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px 40px;margin-bottom:32px">
+    <div>
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">AVALIAÇÕES</div>
+      <h2 style="font-family:Syne;font-weight:700;font-size:clamp(30px,3.6vw,46px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 0">O que nossas alunas<br>dizem de nós.</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;padding:18px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);backdrop-filter:blur(16px)">
+      <div style="width:48px;height:48px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;flex:none"><img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" style="width:28px;height:28px"></div>
+      <div>
+        <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:Syne;font-weight:800;font-size:28px;line-height:1">4.7</span><span style="font-size:14px;color:#8a8087">de 5</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px"><span style="position:relative;display:inline-block;font-size:15px;letter-spacing:2px;color:rgba(251,188,5,.25)">★★★★★<span style="position:absolute;left:0;top:0;width:94%;overflow:hidden;white-space:nowrap;color:#FBBC05;text-shadow:0 0 12px rgba(251,188,5,.55)">★★★★★</span></span><span style="font-size:13px;color:#B9B2B7">Avaliações no Google</span></div>
+      </div>
+    </div>
+  </div>
+  <div data-reveal="1" onMouseEnter="{{ revPause }}" onMouseLeave="{{ revResume }}" style="position:relative">
+    <div style="display:flex;align-items:center;gap:18px">
+      <button onClick="{{ revPrev }}" aria-label="Avaliação anterior" style="display:{{ revArrows }};width:52px;height:52px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#F4F1F3;font-size:0;cursor:pointer;transition:background .25s,border-color .25s;align-items:center;justify-content:center;padding:0" style-hover="background:rgba(255,42,109,.18);border-color:rgba(255,42,109,.6)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M15 6l-6 6 6 6"></path></svg></button>
+      <article data-k="revCard" style="flex:1;min-width:0;position:relative;overflow:hidden;padding:clamp(22px,3.5vw,36px);border-radius:24px;border:1px solid rgba(255,255,255,.1);background:radial-gradient(600px circle at 0% 0%,rgba(255,42,109,.14),transparent 60%),radial-gradient(500px circle at 100% 100%,rgba(5,217,232,.08),transparent 60%),rgba(255,255,255,.03);backdrop-filter:blur(16px);box-shadow:0 30px 80px -30px rgba(0,0,0,.6)">
+        <div style="position:absolute;right:clamp(20px,4vw,48px);top:clamp(4px,1vw,12px);font-family:Syne;font-weight:800;font-size:clamp(90px,11vw,140px);line-height:1;color:rgba(255,42,109,.12);pointer-events:none">”</div>
+        <div style="position:relative;display:flex;align-items:center;gap:14px">
+          <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#FF2A6D,#5E1A3C);display:flex;align-items:center;justify-content:center;font-family:Syne;font-weight:800;font-size:22px;color:#fff;box-shadow:0 0 0 3px rgba(255,42,109,.2)">C</div>
+          <div>
+            <div style="font-weight:600;font-size:17px">Cliente Google</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:3px"><span style="color:#FBBC05;font-size:15px;letter-spacing:2px;text-shadow:0 0 10px rgba(251,188,5,.5)">★★★★★</span><span style="display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:12px;color:#8a8087">via <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" style="width:13px;height:13px;vertical-align:-2px"></span></div>
+          </div>
+        </div>
+        <p style="position:relative;margin:20px 0 0;font-family:Syne;font-weight:600;font-size:clamp(17px,1.8vw,22px);line-height:1.45;letter-spacing:-.01em;text-wrap:pretty;min-height:4.35em">“{{ revText }}”</p>
+        <div style="position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(255,255,255,.06)"><div data-k="revBar" style="height:100%;width:100%;background:linear-gradient(90deg,#FF2A6D,#05D9E8);transform-origin:left;transform:scaleX(0)"></div></div>
+      </article>
+      <button onClick="{{ revNext }}" aria-label="Próxima avaliação" style="display:{{ revArrows }};width:52px;height:52px;flex:none;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#F4F1F3;font-size:0;cursor:pointer;transition:background .25s,border-color .25s;align-items:center;justify-content:center;padding:0" style-hover="background:rgba(255,42,109,.18);border-color:rgba(255,42,109,.6)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M9 6l6 6-6 6"></path></svg></button>
+    </div>
+    <div style="display:{{ revArrowsMobile }};justify-content:center;align-items:center;gap:14px;margin-top:18px">
+      <button onClick="{{ revPrev }}" aria-label="Avaliação anterior" style="display:{{ revArrowsMobile }};width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#F4F1F3;font-size:0;cursor:pointer;align-items:center;justify-content:center;padding:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M15 6l-6 6 6 6"></path></svg></button>
+
+      <button onClick="{{ revNext }}" aria-label="Próxima avaliação" style="display:{{ revArrowsMobile }};width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#F4F1F3;font-size:0;cursor:pointer;align-items:center;justify-content:center;padding:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M9 6l6 6-6 6"></path></svg></button>
+    </div>
+  </div>
+</section>
+
+<section id="planos" data-screen-label="Planos" style="max-width:1240px;margin:0 auto;padding:100px 24px">
+  <div data-reveal="1" style="text-align:center;max-width:680px;margin:0 auto 48px">
+    <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">05 — PLANOS & AVALIAÇÃO</div>
+    <h2 style="font-family:Syne;font-weight:700;font-size:clamp(34px,4.5vw,58px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 18px">Comece com o plano certo.</h2>
+    <p style="margin:0;color:#B9B2B7;font-size:18px;line-height:1.6">Todos os planos incluem acompanhamento das professoras e avaliação por bioimpedância para alinhar suas metas.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;align-items:stretch">
+    <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+      <article data-reveal="1" onMouseMove="{{ glowMove }}" style="position:relative;display:flex;flex-direction:column;padding:34px 30px;border-radius:26px;border:1px solid {{ p.border }};background:radial-gradient(380px circle at var(--mx,50%) var(--my,0%),{{ p.glow }},rgba(255,255,255,.03) 60%);backdrop-filter:blur(16px)">
+        <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-13px;left:30px;padding:6px 12px;border-radius:999px;background:#FF2A6D;font-size:12px;font-weight:600;letter-spacing:.06em">{{ p.badge }}</span></sc-if>
+        <h3 style="margin:0;font-family:Syne;font-weight:700;font-size:26px">{{ p.t }}</h3>
+        <p style="margin:8px 0 26px;color:#8a8087;font-size:15px">{{ p.s }}</p>
+        <ul style="list-style:none;margin:0 0 32px;padding:0;display:flex;flex-direction:column;gap:12px;flex:1">
+          <sc-for list="{{ p.items }}" as="i"><li style="display:flex;gap:12px;font-size:15px;color:#D9D3D7;line-height:1.45"><span style="color:#05D9E8">✓</span>{{ i }}</li></sc-for>
+        </ul>
+        <a href="{{ p.wa }}" target="_blank" style="display:flex;justify-content:center;padding:16px;border-radius:14px;font-weight:600;background:{{ p.btnBg }};color:#fff;border:1px solid {{ p.btnBorder }}">Consultar valores no WhatsApp</a>
+      </article>
+    </sc-for>
+  </div>
+</section>
+
+<section id="historia" data-screen-label="Nossa História" style="max-width:1240px;margin:0 auto;padding:100px 24px">
+  <div style="display:grid;grid-template-columns:{{ histCols }};gap:40px 56px;align-items:center">
+    <div data-k="histImg" style="position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/3;width:100%;border:1px solid rgba(255,255,255,.08);will-change:transform">
+      <img data-k="histImgIn" src="assets/fachada.jpg" alt="Fachada da Atlética Academia Feminina" style="position:absolute;left:0;top:-8%;width:100%;height:116%;object-fit:cover;object-position:62% center;will-change:transform">
+    </div>
+    <div>
+      <div data-reveal="1" style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">CONHEÇA A NOSSA TRAJETÓRIA</div>
+      <h2 data-reveal="1" style="font-family:Syne;font-weight:700;font-size:clamp(34px,4.2vw,54px);line-height:1.02;letter-spacing:-.02em;margin:16px 0 0">Nossa História</h2>
+      <div data-reveal="1" style="display:flex;align-items:baseline;gap:12px;margin-top:14px"><span style="font-size:12px;letter-spacing:.12em;color:#8a8087">DESDE</span><span style="font-family:Syne;font-weight:800;font-size:26px;color:#E0A96D">06.11.2010</span></div>
+      <p data-reveal="1" style="margin:24px 0 0;font-size:18px;line-height:1.6;color:#F4F1F3;text-wrap:pretty">A Atlética Academia Feminina nasceu em 06 de novembro de 2010 do sonho das irmãs e profissionais de Educação Física, Liliane e Leilane Biliazzi. A proposta sempre foi ir além do cuidado com a saúde: criar um espaço exclusivo onde cada mulher se sentisse ouvida, respeitada e com acesso ao que há de melhor em modalidades e corpo docente.</p>
+      <p data-reveal="1" style="margin:16px 0 0;font-size:16px;line-height:1.7;color:#B9B2B7;text-wrap:pretty">Ao longo dos anos, expandimos nossa estrutura, aprimoramos nossos processos e nos tornamos referência no mercado fitness feminino. Hoje, nossa equipe continua em constante crescimento e nossa metodologia é continuamente atualizada para se adaptar às necessidades de cada aluna. Mudamos e evoluímos, mas sem nunca perder nossa essência: transformar a vida das pessoas através do cuidado humano.</p>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:18px;margin-top:56px">
+    <article data-reveal="1" onMouseMove="{{ glowMove }}" style="padding:32px 30px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(255,42,109,.12),rgba(255,255,255,.03) 60%);backdrop-filter:blur(16px)">
+      <div style="font-family:Syne;font-weight:700;font-size:14px;color:#05D9E8">EQUIPE</div>
+      <h3 style="font-family:Syne;font-weight:700;font-size:26px;margin:14px 0 12px;letter-spacing:-.01em">Nossa Equipe</h3>
+      <p style="margin:0;color:#B9B2B7;font-size:16px;line-height:1.6">Acreditamos na melhoria contínua. Nossos profissionais passam por treinamentos frequentes e consultorias especializadas em atendimento e metodologia de treino para oferecer o melhor acompanhamento a cada uma de nossas alunas.</p>
+    </article>
+    <article data-reveal="1" onMouseMove="{{ glowMove }}" style="padding:32px 30px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(255,42,109,.12),rgba(255,255,255,.03) 60%);backdrop-filter:blur(16px)">
+      <div style="font-family:Syne;font-weight:700;font-size:14px;color:#E0A96D">EQUIPAMENTOS</div>
+      <h3 style="font-family:Syne;font-weight:700;font-size:26px;margin:14px 0 12px;letter-spacing:-.01em">Equipamentos de Ponta</h3>
+      <p style="margin:0;color:#B9B2B7;font-size:16px;line-height:1.6">Oferecemos uma estrutura com aparelhos novos e modernos em todos os setores, tanto na área de treino cardiovascular quanto no estúdio de Pilates.</p>
+    </article>
+  </div>
+  <a href="Galeria.dc.html" onClick="{{ goGallery }}" data-reveal="1" onMouseMove="{{ glowMove }}" style="position:relative;display:grid;grid-template-columns:{{ galCols }};gap:24px;align-items:center;margin-top:18px;padding:18px;border-radius:28px;border:1px solid rgba(255,42,109,.35);background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,42,109,.18),rgba(255,255,255,.03) 65%);color:#F4F1F3;overflow:hidden" style-hover="border-color:rgba(255,42,109,.7)">
+    <div style="padding:14px 12px">
+      <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">GALERIA · 21 FOTOS</div>
+      <div style="font-family:Syne;font-weight:700;font-size:clamp(26px,3vw,38px);line-height:1.05;letter-spacing:-.02em;margin-top:12px">Conheça nosso espaço</div>
+      <p style="margin:12px 0 0;color:#B9B2B7;font-size:16px;line-height:1.55">Musculação, cardio, salas de aula, estúdio de Pilates e vestiários.</p>
+      <span style="display:inline-flex;align-items:center;gap:10px;margin-top:22px;min-height:48px;padding:0 22px;border-radius:999px;background:#FF2A6D;color:#fff;font-weight:600;font-size:15px">Ver galeria <span>→</span></span>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:10px;height:clamp(220px,26vw,300px)">
+      <div style="grid-row:span 2;border-radius:18px;overflow:hidden"><img src="assets/galeria/00.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.8,.2,1)" style-hover="transform:scale(1.06)"></div>
+      <div style="border-radius:18px;overflow:hidden"><img src="assets/galeria/17.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      <div style="border-radius:18px;overflow:hidden"><img src="assets/galeria/13.jpg" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+    </div>
+  </a>
+</section>
+
+<section id="contato" data-screen-label="Contato" style="max-width:1240px;margin:0 auto;padding:100px 24px 60px">
+  <div data-reveal="1" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:18px;border-radius:30px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);padding:18px">
+    <div style="padding:30px 26px;display:flex;flex-direction:column;justify-content:space-between;gap:40px">
+      <div>
+        <div style="font-family:ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;color:#FF2A6D">06 — CONTATO</div>
+        <h2 style="font-family:Syne;font-weight:700;font-size:clamp(32px,4vw,52px);line-height:1.02;letter-spacing:-.02em;margin:18px 0 0">Venha conhecer a Atlética.</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:22px;font-size:17px">
+        <div><div style="font-size:12px;letter-spacing:.1em;color:#8a8087;margin-bottom:6px">ENDEREÇO</div>Rua Santa Bárbara, 206 - Centro<br>Santa Bárbara d'Oeste - SP, CEP 13450-010</div>
+        <div style="display:flex;flex-wrap:wrap;gap:22px 40px">
+          <div><div style="font-size:12px;letter-spacing:.1em;color:#8a8087;margin-bottom:6px">TELEFONES</div><a href="tel:+551936267606" style="color:#F4F1F3">(19) 3626-7606</a> <span style="color:#8a8087;font-size:14px">Telefone</span><br><a href="https://wa.me/5519974183482?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Atl%C3%A9tica%20Academia%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" style="color:#F4F1F3">(19) 97418-3482</a> <span style="color:#8a8087;font-size:14px">WhatsApp</span></div>
+          <div><div style="font-size:12px;letter-spacing:.1em;color:#8a8087;margin-bottom:6px">E-MAIL</div><a href="mailto:contato@atleticaacademia.com.br">contato@atleticaacademia.com.br</a><br><span style="color:#E0A96D">#eusouatletica</span><br><a href="https://www.youtube.com/channel/UCOxSuXTsIbVq-jPDJtkiYBQ" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;margin-top:10px;color:#F4F1F3"><span style="width:26px;height:18px;border-radius:5px;background:#FF2A6D;display:inline-flex;align-items:center;justify-content:center;font-size:9px">▶</span>Canal no YouTube</a><br><a href="https://www.instagram.com/atleticaacademia/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;margin-top:8px;color:#F4F1F3"><span style="width:26px;height:18px;border-radius:5px;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);display:inline-flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"></path></svg></span>Instagram</a></div>
+        </div>
+        <a href="https://wa.me/5519974183482?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Atl%C3%A9tica%20Academia%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" style="align-self:flex-start;display:inline-flex;padding:16px 24px;border-radius:14px;background:#FF2A6D;color:#fff;font-weight:600">Falar no WhatsApp</a>
+      </div>
+    </div>
+    <div style="border-radius:20px;overflow:hidden;min-height:380px;border:1px solid rgba(255,255,255,.06)">
+      <iframe title="Mapa" src="https://maps.google.com/maps?q=Rua%20Santa%20B%C3%A1rbara%2C%20206%2C%20Centro%2C%20Santa%20B%C3%A1rbara%20d%27Oeste%20SP&z=16&output=embed" style="width:100%;height:100%;min-height:380px;border:0;filter:invert(.92) hue-rotate(180deg) saturate(.6) contrast(.9)" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer style="max-width:1240px;margin:0 auto;padding:40px 24px 50px;border-top:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:32px">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <img src="assets/logo-mark.png" alt="" style="height:30px">
+      <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:Syne;font-weight:700;letter-spacing:.08em;font-size:14px">ATLÉTICA ACADEMIA FEMININA</span><span style="font-size:13px;color:#E0A96D">#eusouatletica</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;flex:1 1 560px;max-width:720px">
+      <a href="https://www.instagram.com/atleticaacademia/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 18px 12px 12px;border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#F4F1F3;transition:border-color .25s,background .25s,transform .25s" style-hover="border-color:rgba(255,42,109,.55);background:rgba(255,42,109,.08);transform:translateY(-3px)"><span style="width:40px;height:40px;flex:none;border-radius:12px;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);display:flex;align-items:center;justify-content:center;font-family:Outfit;font-weight:700;font-size:13px;color:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" style="display:block"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"></path></svg></span><span style="display:flex;flex-direction:column;line-height:1.25"><span style="font-weight:600;font-size:15px">Instagram</span><span style="font-size:13px;color:#8a8087">@atleticaacademia</span></span><span style="margin-left:auto;color:#8a8087">↗</span></a>
+      <a href="https://www.youtube.com/channel/UCOxSuXTsIbVq-jPDJtkiYBQ" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 18px 12px 12px;border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#F4F1F3;transition:border-color .25s,background .25s,transform .25s" style-hover="border-color:rgba(255,42,109,.55);background:rgba(255,42,109,.08);transform:translateY(-3px)"><span style="width:40px;height:40px;flex:none;border-radius:12px;background:#FF0033;display:flex;align-items:center;justify-content:center;font-family:Outfit;font-weight:700;font-size:13px;color:#fff;padding-left:2px">▶</span><span style="display:flex;flex-direction:column;line-height:1.25"><span style="font-weight:600;font-size:15px">YouTube</span><span style="font-size:13px;color:#8a8087">Canal da Atlética</span></span><span style="margin-left:auto;color:#8a8087">↗</span></a>
+      <a href="https://wa.me/5519974183482?text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Atl%C3%A9tica%20Academia%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 18px 12px 12px;border-radius:18px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#F4F1F3;transition:border-color .25s,background .25s,transform .25s" style-hover="border-color:rgba(255,42,109,.55);background:rgba(255,42,109,.08);transform:translateY(-3px)"><span style="width:40px;height:40px;flex:none;border-radius:12px;background:#25D366;display:flex;align-items:center;justify-content:center;font-family:Outfit;font-weight:700;font-size:13px;color:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" style="display:block"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg></span><span style="display:flex;flex-direction:column;line-height:1.25"><span style="font-weight:600;font-size:15px">WhatsApp</span><span style="font-size:13px;color:#8a8087">(19) 97418-3482</span></span><span style="margin-left:auto;color:#8a8087">↗</span></a>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:14px;color:#6f676c"><span>Rua Santa Bárbara, 206 - Centro, Santa Bárbara d'Oeste - SP</span><span>Copyright © 2026 Atlética Academia Feminina. Todos os direitos reservados.</span></div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { day: 0, menuOpen: false, openNotice: 0, w: typeof window !== 'undefined' ? window.innerWidth : 1280 };
+  hours = ['05:30 – 11:00  |  13:30 – 20:30', '05:30 – 11:00  |  13:30 – 20:30', '05:30 – 11:00  |  13:30 – 20:30', '05:30 – 11:00  |  13:30 – 20:30', '05:30 – 11:00  |  13:30 – 19:30', '07:00 – 11:00'];
+  dayNames = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+  schedule = [
+    [['06:00','Spinning / RPM','Sala de RPM'],['07:00','Jump','Baixo impacto'],['09:00','LPF','Postural e respiratório'],['18:30','FitDance','Coreografias progressivas'],['19:30','HIIT','Express · 30 min']],
+    [['06:00','Treinamento Funcional','Força e agilidade'],['08:00','Balance Pilates','Estúdio de Pilates'],['14:00','Yoga','Corpo e mente'],['19:00','Zumba','Ritmos latinos']],
+    [['06:00','Spinning / RPM','Sala de RPM'],['07:00','Jump','Baixo impacto'],['09:00','LPF','Postural e respiratório'],['18:30','FitDance','Coreografias progressivas'],['19:30','HIIT','Express · 30 min']],
+    [['06:00','Treinamento Funcional','Força e agilidade'],['08:00','Balance Pilates','Estúdio de Pilates'],['19:00','Zumba','Ritmos latinos'],['20:00','Flow & Wine','Edição especial mensal']],
+    [['06:00','Spinning / RPM','Sala de RPM'],['07:00','HIIT','Express · 30 min'],['18:00','FitDance','Sexta de energia']],
+    [['07:00','Treino de Corrida','Encontro externo'],['09:00','Balance Pilates','Turma de sábado']]
+  ];
+  reviews = [
+    "Ambiente acolhedor e professoras muito atenciosas. Sempre corrigem a execução e acompanham meu treino de perto.",
+    "Equipamentos novos e tudo sempre muito limpo e organizado. Dá gosto de treinar aqui.",
+    "As aulas coletivas são incríveis, principalmente o Jump e o FitDance. Saio de lá renovada!",
+    "Fiz a bioimpedância e hoje acompanho minha evolução com números reais. Recomendo demais.",
+    "Me sinto segura e à vontade, sem nenhum julgamento. A melhor academia feminina da cidade.",
+    "Treino há três anos e nunca pensei em trocar. As professoras conhecem cada aluna pelo nome.",
+    "O estúdio de Pilates é lindo e muito bem equipado. As aulas são tranquilas e muito bem conduzidas.",
+    "Comecei sem nenhum condicionamento e fui super bem recebida. Hoje treino com prazer e constância.",
+    "Salas climatizadas, vestiário limpo e espaçoso. Dá para treinar confortável até no verão.",
+    "O Spinning é viciante! A sala de RPM é ampla e as professoras animam demais a turma.",
+    "Adoro os eventos da academia, como o Flow & Wine. É um momento só nosso, muito especial.",
+    "Localização ótima no centro e fácil de estacionar. Consigo encaixar o treino na rotina sem estresse.",
+    "A professora ajustou meu treino depois de uma lesão no joelho. Cuidado e atenção de verdade.",
+    "Ambiente só de mulheres faz toda a diferença. Treino sem me preocupar com olhares.",
+    "O HIIT de 30 minutos é perfeito para quem tem pouco tempo. Resultado rápido e aula muito dinâmica.",
+    "Depois dos 40 encontrei aqui um treino que respeita meu corpo. Estou mais forte e disposta.",
+    "Zumba e FitDance são diversão garantida. Nem parece que estou fazendo exercício!",
+    "Atendimento impecável desde a recepção. Todas muito educadas e prestativas.",
+    "O LPF me ajudou muito com a postura e a respiração. Senti diferença já nas primeiras semanas.",
+    "Academia organizada, horários bem distribuídos e segurança à noite. Me sinto tranquila saindo tarde."
+  ];
+  revGo(i) { const n = this.reviews.length; this.setState({ rev: (i + n) % n }); this._revT = 0; }
+  runIntro(done) {
+    const q = k => document.querySelector('[data-k="' + k + '"]'), ov = q('intro');
+    if (!ov) return done();
+    let seen = false; try { seen = sessionStorage.getItem('athIntro') === '1' || !!sessionStorage.getItem('athBack'); sessionStorage.setItem('athIntro', '1'); } catch (e) {}
+    if (seen) { ov.remove(); return done(); }
+    const root = document.documentElement, prevOv = root.style.overflow; root.style.overflow = 'hidden';
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, logo = q('introLogo'), glow = q('introGlow'), sheen = q('introSheen'), skip = q('introSkip');
+    const ease = 'cubic-bezier(.2,.8,.2,1)', anims = []; let ended = false, timer;
+    const A = (el, k, o) => { const a = el.animate(k, o); anims.push(a); return a; };
+    const finish = fast => {
+      if (ended) return; ended = true; clearTimeout(timer);
+      A(logo, [{ transform: 'scale(1)', opacity: 1, filter: 'blur(0)' }, { transform: reduce ? 'scale(1)' : 'scale(1.35)', opacity: 0, filter: reduce ? 'blur(0)' : 'blur(8px)' }], { duration: fast ? 300 : 700, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' });
+      A(glow, [{ opacity: glow.getAnimations().length ? .9 : 0 }, { opacity: 0 }], { duration: 500, fill: 'forwards' });
+      const out = ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: fast ? 400 : 800, delay: fast ? 80 : 280, easing: 'ease-in-out', fill: 'forwards' });
+      setTimeout(done, fast ? 120 : 420);
+      out.onfinish = () => { root.style.overflow = prevOv; ov.remove(); };
+    };
+    skip.addEventListener('click', () => finish(true));
+    addEventListener('keydown', e => { if (e.key === 'Escape' || e.key === 'Enter') finish(true); }, { once: true });
+    skip.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 400, fill: 'forwards' });
+    if (reduce) {
+      A(logo, [{ opacity: 0 }, { opacity: 1 }], { duration: 400, fill: 'forwards' });
+      timer = setTimeout(() => finish(false), 1100); return;
+    }
+    A(logo, [{ opacity: 0, transform: 'translate(-6%,4%) scale(.94)', filter: 'blur(10px)', clipPath: 'inset(0 100% 0 0)' }, { opacity: 1, transform: 'none', filter: 'blur(0)', clipPath: 'inset(0 0% 0 0)' }], { duration: 1100, delay: 150, easing: ease, fill: 'forwards' });
+    A(glow, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: .9, transform: 'scale(1)' }], { duration: 1400, delay: 500, easing: ease, fill: 'forwards' });
+    A(sheen, [{ backgroundPosition: '120% 0' }, { backgroundPosition: '-20% 0' }], { duration: 1100, delay: 1050, easing: 'cubic-bezier(.45,0,.2,1)', fill: 'forwards' });
+    timer = setTimeout(() => finish(false), 2500);
+  }
+  componentDidMount() {
+    this._revT = 0; this._revLast = performance.now();
+    this._revTick = () => { this._revRaf = requestAnimationFrame(this._revTick); const now = performance.now(), dt = now - this._revLast; this._revLast = now; if (!this._revPaused && !document.hidden) this._revT += dt; const bar = document.querySelector('[data-k="revBar"]'); if (bar) bar.style.transform = 'scaleX(' + Math.min(1, this._revT / 5000) + ')'; if (this._revT >= 5000) this._revDir = 1, this.revGo((this.state.rev || 0) + 1); };
+    this._revTick();
+    const W = () => window.innerWidth, H = () => window.innerHeight;
+    const q = k => document.querySelectorAll('[data-k="' + k + '"]'), q1 = k => document.querySelector('[data-k="' + k + '"]');
+    const cl = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v)), seg = (p, a, b) => cl((p - a) / (b - a)), ease = t => 1 - Math.pow(1 - t, 3), lerp = (a, b, t) => a + (b - a) * t;
+    const prog = el => { const r = el.getBoundingClientRect(), d = r.height - H(); return d > 0 ? cl(-r.top / d) : 0; };
+    const m = this.mouse = { x: 0, y: 0, tx: 0, ty: 0, gx: W() / 2, gy: H() / 2, tgx: W() / 2, tgy: H() / 2 };
+    this._onMove = e => { m.tx = e.clientX / W() - .5; m.ty = e.clientY / H() - .5; m.tgx = e.clientX; m.tgy = e.clientY; };
+    window.addEventListener('mousemove', this._onMove, { passive: true });
+    this.layout = () => { const sec = q1('pin-gal'), tr = q1('galTrack'); if (!sec || !tr) return; this.galDist = Math.max(0, tr.scrollWidth - W()); sec.style.height = (H() + this.galDist + H() * .3) + 'px'; };
+    this._onResize = () => { this.setState({ w: W() }); this.layout(); };
+    window.addEventListener('resize', this._onResize);
+    [100, 600, 1500].forEach(t => setTimeout(this.layout, t));
+    const curt = document.querySelector('[data-k="curtain"]');
+    if (curt) {
+      try { const o = JSON.parse(sessionStorage.getItem('athBack') || 'null'); if (o) { sessionStorage.removeItem('athBack'); curt.animate([{ clipPath: 'circle(150% at ' + o.x + 'px ' + o.y + 'px)' }, { clipPath: 'circle(0% at ' + o.x + 'px ' + o.y + 'px)' }], { duration: 900, easing: 'cubic-bezier(.7,0,.2,1)' }); } } catch (e) {}
+      window.addEventListener('pageshow', e => { if (e.persisted) { curt.getAnimations().forEach(x => x.cancel()); curt.style.pointerEvents = 'none'; } });
+    }
+    let lastCount = -1;
+    const tick = () => {
+      this.raf = requestAnimationFrame(tick);
+      m.x += (m.tx - m.x) * .07; m.y += (m.ty - m.y) * .07; m.gx += (m.tgx - m.gx) * .12; m.gy += (m.tgy - m.gy) * .12;
+      const glow = q1('glow'); if (glow) glow.style.transform = 'translate3d(' + (m.gx - 320) + 'px,' + (m.gy - 320) + 'px,0)';
+      const hs = q1('pin-hero');
+      if (hs) {
+        const p = prog(hs), a = seg(p, .15, 1);
+        const intro = q1('heroIntro'); if (intro) { intro.style.opacity = 1 - a; intro.style.transform = 'translateY(' + (-a * 90) + 'px) scale(' + (1 - a * .12) + ')'; intro.style.pointerEvents = a > .5 ? 'none' : 'auto'; }
+        const hint = q1('heroHint'); if (hint) { hint.style.opacity = 1 - seg(p, 0, .2); hint.style.display = H() < 760 ? 'none' : ''; }
+        const lg = q1('heroLogo'); if (lg) lg.style.transform = 'translate(' + m.x * 40 + 'px,' + m.y * 40 + 'px) rotate(' + m.x * 10 + 'deg)';
+        const tt = q1('heroTitle'); if (tt) tt.style.transform = 'translate(' + m.x * -16 + 'px,' + m.y * -10 + 'px)';
+      }
+      const man = q1('pin-man');
+      if (man) { const p = prog(man), ws = q('mw'), N = ws.length; ws.forEach((w, i) => { w.style.opacity = .14 + .86 * cl(p * 1.2 * N - i); }); }
+      q('est').forEach(el => { const r = el.getBoundingClientRect(), d = cl(Math.abs(r.top + r.height / 2 - H() * .5) / (H() * .5)); el.style.opacity = .18 + .82 * (1 - d); el.style.transform = 'translateX(' + d * 24 + 'px)'; });
+      const hi = q1('histImg');
+      if (hi) { const r = hi.getBoundingClientRect(), t = cl((H() - r.top) / (H() * .9)), k = ease(t); hi.style.transform = 'scale(' + lerp(.92, 1, k) + ')'; const im = q1('histImgIn'); if (im) im.style.transform = 'translateY(' + lerp(-6, 6, cl((H() - r.top) / (H() + r.height))) + '%) translate(' + m.x * -10 + 'px,' + m.y * -6 + 'px)'; }
+      const es = document.getElementById('estrutura');
+      if (es) {
+        const r = es.getBoundingClientRect(), t = cl((H() * .25 - r.top) / (r.height - H() * .6)), n = Math.round(t * 12);
+        const c = q1('lpfCount'); if (c && n !== lastCount) { c.textContent = n; lastCount = n; }
+        const ring = q1('lpfRing'); if (ring) ring.setAttribute('stroke-dashoffset', 295.3 * (1 - t));
+      }
+      const gs = q1('pin-gal');
+      { const tr0 = q1('galTrack'); if (tr0 && tr0.scrollWidth !== this._lastSW) { this._lastSW = tr0.scrollWidth; this.layout(); } }
+      if (gs) { const p = prog(gs), tr = q1('galTrack'), bar = q1('galBar'); if (tr) tr.style.transform = 'translate3d(' + (-p * (this.galDist || 0)) + 'px,0,0)'; if (bar) bar.style.transform = 'scaleX(' + p + ')'; }
+    };
+    tick();
+    const heroReveal = () => document.querySelectorAll('[data-ch]').forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(0.6em) rotate(6deg)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 700, delay: 200 + i * 35, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+    this.runIntro(heroReveal);
+    this._io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.animate([{ opacity: 0, transform: 'translateY(50px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 900, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards', delay: (e.target.dataset.i || 0) * 90 }); e.target.style.opacity = ''; this._io.unobserve(e.target); }
+    }), { threshold: 0.12 });
+    setTimeout(() => document.querySelectorAll('[data-reveal]').forEach(el => { if (el.getBoundingClientRect().top < H()) return; el.style.opacity = '0'; this._io.observe(el); }), 50);
+  }
+  componentWillUnmount() { cancelAnimationFrame(this._revRaf); cancelAnimationFrame(this.raf); window.removeEventListener('mousemove', this._onMove); window.removeEventListener('resize', this._onResize); this._io && this._io.disconnect(); }
+  allMods() {
+    return this._mods || (this._mods = [
+        { n: '01', accent: '#FF2A6D', cat: 'res', img: 'musculação', src: 'assets/mod/musculacao.jpg', t: 'Musculação Personalizada', x: 'Resultados consistentes, constância e alinhamento individualizado com a rotina diária da mulher.' },
+        { n: '02', accent: '#05D9E8', cat: 'res', img: 'lpf', src: 'assets/mod/lpf.jpg', t: 'LPF – Low Pressure Fitness', x: 'Treinamento postural e respiratório para redução de até 12 cm de circunferência abdominal e fortalecimento do core.' },
+        { n: '03', accent: '#E0A96D', pos: '55% 60%', split: true, cat: 'res', img: 'pilates', src: 'assets/mod/pilates.jpg', t: 'Balance Pilates & Estúdio', tag: 'FLOW & WINE', x: 'Movimentos suaves e controlados para postura, respiração, flexibilidade e tônus muscular.' },
+        { n: '04', accent: '#FF2A6D', cat: 'dan aer', img: 'fitdance', src: 'assets/mod/fitdance.jpg', t: 'FitDance', x: 'Coreografias modernas e didáticas para aprendizado progressivo, queimando calorias com diversão.' },
+        { n: '05', accent: '#FF2A6D', cat: 'dan aer', img: 'zumba', src: 'assets/mod/danca.jpg', t: 'Zumba', x: 'Ritmos latinos e ginástica aeróbica para alta queima calórica e alívio do estresse.' },
+        { n: '06', accent: '#05D9E8', cat: 'car', img: 'sala de rpm', src: 'assets/mod/spinning.jpg', t: 'Spinning / RPM', x: 'Ciclismo indoor com variações de intensidade para pernas, glúteos e capacidade cardiorrespiratória.' },
+        { n: '07', accent: '#FF2A6D', cat: 'car res', img: 'hiit', src: 'assets/mod/hiit.jpg', t: 'HIIT', tag: '30 MIN', x: 'Treinos intervalados express de alta intensidade e elevado gasto calórico pós-treino.' },
+        { n: '08', accent: '#FF2A6D', cat: 'aer car', img: 'jump', src: 'assets/mod/jump.jpg', t: 'Jump', x: 'Exercícios ritmados em mini trampolins: diversão, alto gasto calórico e baixo impacto nas articulações.' },
+        { n: '09', accent: '#05D9E8', cat: 'res car', img: 'funcional', src: 'assets/mod/funcional.jpg', t: 'Treinamento Funcional', x: 'Força, agilidade, equilíbrio, coordenação e potência para os movimentos reais do dia a dia.' },
+        { n: '10', accent: '#E0A96D', cat: 'res', img: 'yoga', src: 'assets/mod/yoga.jpg', t: 'Yoga', x: 'Prática holística de equilíbrio entre corpo, mente e saúde espiritual.' },
+        { n: '11', accent: '#05D9E8', cat: 'car aer', img: 'corrida', src: 'assets/mod/corrida.jpg', t: 'Treino de Corrida', tag: 'EXTERNO', x: 'Grupos de corrida e caminhada para superar metas, quebrar recordes pessoais e ganhar qualidade de vida.' }
+      ].map(m => ({ ...m, pos: m.pos || 'center', split: !!m.split, full: !m.split, label: m.src ? '' : 'foto: ' + m.img })));
+  }
+  componentDidUpdate() {
+    const r = this.state.rev || 0;
+    if (this._lastRev !== undefined && r !== this._lastRev) { const c = document.querySelector('[data-k="revCard"] p'); if (c) c.animate([{ opacity: 0, transform: 'translateX(' + (this._revDir || 1) * 40 + 'px)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 650, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
+    this._lastRev = r;
+    const c = this.state.cat || 'all';
+    if (this._lastCat === undefined) { this._lastCat = c; return; }
+    if (c !== this._lastCat) {
+      this._lastCat = c;
+      const tr = document.querySelector('[data-k="galTrack"]');
+      if (tr) [...tr.children].forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(30px) scale(.96)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: i * 60, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }));
+    }
+  }
+  renderVals() {
+    const s = this.state, mobile = s.w < 1000;
+    const tiltMove = e => { const el = e.currentTarget, r = el.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; el.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 14}deg) scale(1.02)`; el.style.borderColor = 'rgba(255,42,109,.45)'; };
+    const tiltLeave = e => { e.currentTarget.style.transform = ''; e.currentTarget.style.borderColor = ''; };
+    const glowMove = e => { const el = e.currentTarget, r = el.getBoundingClientRect(); el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px'); };
+    const dots = { 'Jump': '#FF2A6D', 'HIIT': '#FF2A6D', 'Zumba': '#FF2A6D', 'FitDance': '#FF2A6D', 'Balance Pilates': '#E0A96D', 'Yoga': '#E0A96D', 'Flow & Wine': '#E0A96D' };
+    const notices = [
+      ['Inverno: aqueça sempre', 'Nos dias frios, os músculos demoram mais para responder. Reserve de 8 a 10 minutos de aquecimento antes da primeira série.'],
+      ['Treino e ciclo menstrual', 'Ajustamos volume e intensidade de acordo com cada fase do ciclo. Converse com a professora para adaptar seu treino.'],
+      ['Pós-fim de semana, sem neura', 'Não é preciso "pagar" o fim de semana com cardio extra. Volte à rotina normal: constância vale mais que compensação.']
+    ];
+    return {
+      histCols: s.w < 860 ? 'minmax(0,1fr)' : 'minmax(0,6fr) minmax(0,5fr)',
+      galCols: s.w < 860 ? 'minmax(0,1fr)' : 'minmax(0,5fr) minmax(0,7fr)',
+      goGallery: e => {
+        e.preventDefault(); const href = 'Galeria.dc.html', c = document.querySelector('[data-k="curtain"]');
+        const x = e.clientX || window.innerWidth / 2, y = e.clientY || window.innerHeight / 2;
+        try { sessionStorage.setItem('athTransition', JSON.stringify({ x: Math.round(x), y: Math.round(y) })); } catch (err) {}
+        this.setState({ menuOpen: false });
+        if (!c) { location.href = href; return; }
+        c.style.pointerEvents = 'auto';
+        const a = c.animate([{ clipPath: 'circle(0% at ' + x + 'px ' + y + 'px)' }, { clipPath: 'circle(150% at ' + x + 'px ' + y + 'px)' }], { duration: 800, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' });
+        a.onfinish = () => { location.href = href; };
+      },
+      revText: this.reviews[s.rev || 0],
+      revArrows: s.w < 700 ? 'none' : 'inline-flex', revArrowsMobile: s.w < 700 ? 'inline-flex' : 'none',
+      revPause: () => { this._revPaused = true; }, revResume: () => { this._revPaused = false; },
+      revPrev: () => { this._revDir = -1; this.revGo((s.rev || 0) - 1); }, revNext: () => { this._revDir = 1; this.revGo((s.rev || 0) + 1); },
+      revDots: this.reviews.map((_, i) => ({ w: i === (s.rev || 0) ? '28px' : '8px', bg: i === (s.rev || 0) ? '#FF2A6D' : 'rgba(255,255,255,.2)', go: () => { this._revDir = i > (s.rev || 0) ? 1 : -1; this.revGo(i); } })),
+      estCols: s.w < 860 ? 'minmax(0,1fr)' : 'minmax(0,5fr) minmax(0,7fr)',
+      manWords: 'Mais do que um lugar para treinar, um ambiente acolhedor onde cada aluna conta com acompanhamento próximo de professoras preparadas para orientar execuções, ajustar equipamentos e garantir segurança e eficiência.'.split(' ').map(t => ({ t, c: /acolhedor|acompanhamento|próximo|segurança|eficiência/.test(t) ? '#FF2A6D' : '#F4F1F3' })),
+      estrutura: [
+        { n: '01', c: '#05D9E8', t: 'Localização privilegiada', x: 'Acesso rápido e estacionamento simplificado.' },
+        { n: '02', c: '#E0A96D', t: 'Segurança garantida', x: 'Suporte dedicado no período noturno (das 18h até o encerramento das atividades).' },
+        { n: '03', c: '#FF2A6D', t: 'Espaços amplos e climatizados', x: 'Salas modernas e climatizadas, incluindo um espaço exclusivo para RPM e duas salas integradas para ginástica.' },
+        { n: '04', c: '#05D9E8', t: 'Comodidade e Bem-estar', x: 'Estúdio de Pilates completo, sala dedicada para avaliação funcional e vestiários espaçosos.' }
+      ],
+      schedCols: s.w < 860 ? 'minmax(0,1fr)' : 'minmax(0,2fr) minmax(0,1fr)',
+      brandDisplay: s.w < 420 ? 'none' : 'inline', ctaPad: s.w < 420 ? '14px' : '18px', glowDisplay: (typeof matchMedia !== 'undefined' && matchMedia('(hover: none)').matches) ? 'none' : 'block',
+      navDisplay: mobile ? 'none' : 'flex', burgerDisplay: mobile ? 'inline-flex' : 'none',
+      menuOpen: s.menuOpen && mobile, menuIcon: s.menuOpen ? '✕' : '☰',
+      toggleMenu: () => this.setState({ menuOpen: !s.menuOpen }), closeMenu: () => this.setState({ menuOpen: false }),
+      heroWords: [['TRANSFORME', '#F4F1F3'], ['SUA', '#F4F1F3'], ['MELHOR', '#FF2A6D'], ['VERSÃO', '#F4F1F3']].map(([w, color]) => ({ color, letters: w.split('') })),
+      magnetMove: e => { const el = e.currentTarget, r = el.getBoundingClientRect(); el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px,${(e.clientY - r.top - r.height / 2) * .35}px)`; },
+      magnetLeave: e => { e.currentTarget.style.transform = ''; },
+      tiltMove, tiltLeave, glowMove,
+      diffs: [
+        { n: '01', accent: '#FF2A6D', t: 'Acompanhamento Estratégico', x: 'Professoras presentes em cada série para garantir propósito, correção e evolução constante.' },
+        { n: '02', accent: '#05D9E8', t: 'Bioimpedância Avançada', x: 'Acompanhamento preciso da composição corporal para metas reais.' },
+        { n: '03', accent: '#E0A96D', t: 'Comunidade & Conexão', x: 'Eventos exclusivos, como as aulas de Pilates com Vinho e o Arraiá da Atlética, que unem leveza, saúde e momentos entre mulheres.' }
+      ],
+      cats: [['all','Todas'],['aer','Aeróbica'],['car','Cardio'],['res','Resistência'],['dan','Dança']].map(([id,label]) => { const a = (s.cat || 'all') === id; return { label, count: id === 'all' ? 11 : this.allMods().filter(m => m.cat.includes(id)).length, select: () => this.setState({ cat: id }), bg: a ? '#FF2A6D' : 'rgba(255,255,255,.04)', color: a ? '#fff' : '#B9B2B7', border: a ? '#FF2A6D' : 'rgba(255,255,255,.12)' }; }),
+      mods: this.allMods().filter(m => (s.cat || 'all') === 'all' || m.cat.includes(s.cat)),
+      days: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((label, i) => {
+        const a = i === s.day;
+        return { label, select: () => this.setState({ day: i }), bg: a ? '#FF2A6D' : 'transparent', color: a ? '#fff' : '#B9B2B7', border: a ? '#FF2A6D' : 'rgba(255,255,255,.08)' };
+      }),
+      hours: this.hours[s.day], dayName: this.dayNames[s.day],
+      classes: this.schedule[s.day].map(([h, t, p]) => ({ h, t, p, dot: dots[t] || '#05D9E8' })),
+      notices: notices.map(([t, x], i) => {
+        const open = s.openNotice === i;
+        return { t, x, open, sign: open ? '–' : '+', toggle: () => this.setState({ openNotice: open ? -1 : i }), bg: open ? 'rgba(5,217,232,.06)' : 'rgba(255,255,255,.03)', border: open ? 'rgba(5,217,232,.35)' : 'rgba(255,255,255,.08)' };
+      }),
+      tips: [
+        { c: 'ROTINA', t: 'Treinos que cabem na rotina', d: '8:12' },
+        { c: 'SAÚDE', t: 'O que é Lipedema e como a musculação ajuda', d: '11:40' },
+        { c: 'RESULTADOS', t: 'Por que a barriga é a última a mudar?', d: '6:05' },
+        { c: '40+', t: 'Cuidados pós-40 anos', d: '9:27' }
+      ],
+      plans: [
+        { wa: 'https://wa.me/5519974183482?text=Ol%C3%A1!%20Quero%20saber%20a%20respeito%20dos%20valores%20do%20plano%20Essencial%20da%20Atl%C3%A9tica%20Academia.', t: 'Essencial', s: 'Para começar com constância', items: ['Musculação com acompanhamento', 'Avaliação inicial por bioimpedância', 'Treino ajustado à sua rotina'], border: 'rgba(255,255,255,.08)', glow: 'rgba(255,255,255,.06)', btnBg: 'transparent', btnBorder: 'rgba(255,255,255,.18)' },
+        { wa: 'https://wa.me/5519974183482?text=Ol%C3%A1!%20Quero%20saber%20a%20respeito%20dos%20valores%20do%20plano%20Completo%20da%20Atl%C3%A9tica%20Academia.', t: 'Completo', s: 'Musculação + aulas coletivas', badge: 'MAIS ESCOLHIDO', items: ['Tudo do Essencial', 'Acesso às aulas coletivas: Jump, FitDance, Zumba, RPM, HIIT e mais', 'Bioimpedância periódica para ajuste de metas', 'Prioridade nos eventos da Atlética'], border: 'rgba(255,42,109,.5)', glow: 'rgba(255,42,109,.2)', btnBg: '#FF2A6D', btnBorder: '#FF2A6D' },
+        { wa: 'https://wa.me/5519974183482?text=Ol%C3%A1!%20Quero%20saber%20a%20respeito%20dos%20valores%20do%20plano%20Bem-estar%20da%20Atl%C3%A9tica%20Academia.', t: 'Bem-estar', s: 'Pilates e experiências', items: ['Balance Pilates, Yoga e LPF', 'Convites para o Flow & Wine', 'Avaliação corporal inclusa'], border: 'rgba(224,169,109,.35)', glow: 'rgba(224,169,109,.14)', btnBg: 'transparent', btnBorder: 'rgba(224,169,109,.5)' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
